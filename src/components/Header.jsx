@@ -20,8 +20,8 @@ const Header = () => {
                     </nav>
 
                     <div className='space-x-6 hidden md:block'>
-                       <button>SignIn</button>
-                       <button>SignUp</button>
+                       <Link to="/signin">SignIn</Link>
+                       <Link to="/signup">SignUp</Link>
                     </div>
 
                     <Menu className='md:hidden' />

@@ -6,6 +6,8 @@ import About from "./pages/About"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
 import Post from "./pages/Post"
+import Signup from "./pages/Signup"
+import Signin from "./pages/Signin"
 
 
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/post/:postId" element={<Post />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
         </Routes>
       </Layout>
     </Router>
