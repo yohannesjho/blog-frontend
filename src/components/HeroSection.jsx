@@ -2,7 +2,7 @@ import React from 'react'
 
 const HeroSection = () => {
     return (
-        <div className='flex justify-between'>
+        <div className='flex md:flex-row justify-between space-x-6 flex-col space-y-6 md:space-y-0  '>
             <div className='space-y-10'>
                 <h2 className='text-lg md:text-2xl lg:text-3xl font-bold text-center'>Untitled Blog</h2>
                 <div className='border-2 rounded-2xl w-72 flex justify-between'>

@@ -5,6 +5,7 @@ import Article from "./pages/Article"
 import About from "./pages/About"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
+import Post from "./pages/Post"
 
 
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/article" element={<Article />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/post/:postId" element={<Post />} />
         </Routes>
       </Layout>
     </Router>
