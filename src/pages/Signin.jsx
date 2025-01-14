@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const Signin = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { handleLogin } = useAuth();
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -42,9 +44,9 @@ const Signin = () => {
       }
       else {
         const data = await response.json()
-        console.log(data)
-
-        localStorage.setItem('token', data)
+         
+        handleLogin(data)
+        
         alert("You signed in successfully!");
         navigate('/'); // Redirect to home page
       }

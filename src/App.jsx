@@ -8,26 +8,31 @@ import Home from "./pages/Home"
 import Post from "./pages/Post"
 import Signup from "./pages/Signup"
 import Signin from "./pages/Signin"
+import Dashboard from "./pages/Dashboard"
+import { AuthProvider } from "./AuthContext"
 
 
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
 
-      <Layout className="">
-        <Routes>
-          <Route path="/" element = {<Home />} />
-          <Route path="/category" element={<Category />} />
-          <Route path="/article" element={<Article />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/post/:postId" element={<Post />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<Signin />} />
-        </Routes>
-      </Layout>
-    </Router>
+        <Layout className="">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/category" element={<Category />} />
+            <Route path="/article" element={<Article />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/post/:postId" element={<Post />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   )
 }
 
