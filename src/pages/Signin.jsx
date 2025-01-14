@@ -23,13 +23,32 @@ const Signin = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-     
-      console.log('Signin successful:', formData);
-      alert('Signin successful!');
-      navigate('/dashboard'); // Redirect to dashboard or another page
+      const response = await fetch("http://localhost:5000/api/users/signin", {
+        method: "POST", // Method name should be a string
+        headers: {
+          "Content-Type": "application/json" // Specify that you're sending JSON data
+        },
+        body: JSON.stringify(formData) // Use `JSON.stringify` to convert the object to JSON format
+      });
+
+
+
+      if (!response.ok) {
+        const data = await response.json()
+        alert(data.message)
+      }
+      else {
+        const data = await response.json()
+        console.log(data)
+
+        localStorage.setItem('token', data)
+        alert("You signed in successfully!");
+        navigate('/'); // Redirect to home page
+      }
+
     }
   };
 
