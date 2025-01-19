@@ -1,3 +1,4 @@
+ 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 // Create AuthContext
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const handleLogin = (newToken) => {
-        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', newToken);
         setToken(newToken);
     };
 

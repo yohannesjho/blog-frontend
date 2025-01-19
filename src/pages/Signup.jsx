@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
     const [formData, setFormData] = useState({ userName: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
+    const [ selected, setSelected ] = useState(false)
+    const [ admin, setAdmin ]= useState(false)
     const navigate = useNavigate();
 
     // Handle input change

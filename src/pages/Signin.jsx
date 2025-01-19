@@ -45,7 +45,7 @@ const Signin = () => {
       else {
         const data = await response.json()
          
-        handleLogin(data)
+        handleLogin(data.token)
         
         alert("You signed in successfully!");
         navigate('/'); // Redirect to home page
