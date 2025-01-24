@@ -6,8 +6,11 @@ const Post = () => {
   const [blog, setBlog] = useState({});
   const [comments, setComments] = useState([]);
   const [commentToggle, setCommentToggle] = useState(false);
-  const [comment, setComment] = useState({ content: "", postId: postId });
+  const [comment, setComment] = useState({ content: "", postId });
   const [users, setUsers] = useState({});
+  const [deleteComment, setDeleteComment] = useState(false);
+  const [editCommentId, setEditCommentId] = useState(null);
+  const [editedContent, setEditedContent] = useState({ content: "" });
 
   // Fetch blog details
   useEffect(() => {
@@ -65,7 +68,7 @@ const Post = () => {
     };
 
     fetchComments();
-  }, [postId]);
+  }, [postId, deleteComment]);
 
   // Fetch user data for each comment
   useEffect(() => {
@@ -77,9 +80,7 @@ const Post = () => {
   const fetchUser = async (id) => {
     if (!users[id]) {
       const user = await getUser(id);
-      console.log(user)
       setUsers((prevUsers) => ({ ...prevUsers, [id]: user }));
-
     }
   };
 
@@ -87,10 +88,8 @@ const Post = () => {
     const response = await fetch(`http://localhost:5000/api/users/user/${id}`);
     const data = await response.json();
 
-
     if (response.ok) {
-      console.log(data.user[0])
-      return data.user[0]; // Ensure it returns user data
+      return data.user[0];
     }
     return null;
   };
@@ -130,13 +129,12 @@ const Post = () => {
   };
 
   const handleDeleteComment = async (id) => {
-    console.log(id)
     const token = localStorage.getItem("user");
     try {
       const response = await fetch(
         `http://localhost:5000/api/comments/deletecomment/${id}`,
         {
-          method:'DELETE',
+          method: "DELETE",
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -144,18 +142,49 @@ const Post = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Error fetching comments!");
+        throw new Error("Error deleting comment!");
+      } else {
+        alert("Comment deleted successfully!");
+        setDeleteComment((prev) => !prev);
       }
-      else {
-        alert('You deleted a comment successfully')
-      }
-
-      
     } catch (error) {
       console.error(error.message);
       alert(error.message);
     }
-  }
+  };
+
+  const handleCommentChange = (e) => {
+    const { name, value } = e.target;
+    setEditedContent({ ...editedContent, [name]: value });
+  };
+
+  const handleSendEditedComment = async (id) => {
+    const token = localStorage.getItem("user");
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/comments/updatecomment/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(editedContent),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error updating comment!");
+      } else {
+        alert("Comment updated successfully!");
+        setEditCommentId(null); // Close the edit input after update
+      }
+    } catch (error) {
+      console.error(error.message);
+      alert(error.message);
+    }
+  };
 
   return (
     <div className="flex justify-center items-center py-12">
@@ -173,31 +202,64 @@ const Post = () => {
           </div>
           <p>{blog.content}</p>
         </div>
-        {/* Render comments */}
         <div>
           {comments.map((comment) => (
-
             <div
-
-              key={comment.id} // Add unique key for each comment
-              className="flex justify-between  items-center"
+              key={comment.id}
+              className="flex justify-between items-center"
             >
               <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-
-                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2  text-gray-600">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2 text-gray-600">
                   <span className="block">
-                    <span className="font-semibold">Name: </span>{users[comment.user_id]?.username || "Loading..."}
+                    <span className="font-semibold">Name: </span>
+                    {users[comment.user_id]?.username || "Loading..."}
                   </span>
                   <span className="block">
-                    <span className="font-semibold">Role: </span>{users[comment.user_id]?.role || "Loading..."}
+                    <span className="font-semibold">Role: </span>
+                    {users[comment.user_id]?.role || "Loading..."}
                   </span>
                 </div>
-                <p className="text-gray-800 text-lg font-medium">{comment.content}</p>
-
-                <p className="text-gray-500 text-sm mt-4">{new Date(comment.created_at).toLocaleString()}</p>
-                <button onClick={() => handleDeleteComment(comment.id)} className="bg-red-500 text-white rounded-lg text-sm hover:bg-red-300 duration-300 px-2 py-1">Delete</button>
+                <p className="text-gray-800 text-lg font-medium">
+                  {comment.content}
+                </p>
+                <p className="text-gray-500 text-sm mt-4">
+                  {new Date(comment.created_at).toLocaleString()}
+                </p>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleDeleteComment(comment.id)}
+                    className="bg-red-500 text-white rounded-lg text-sm hover:bg-red-300 duration-300 px-2 py-1"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() =>
+                      setEditCommentId((prev) =>
+                        prev === comment.id ? null : comment.id
+                      )
+                    }
+                    className="bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-300 duration-300 px-2 py-1"
+                  >
+                    Edit
+                  </button>
+                </div>
+                {editCommentId === comment.id && (
+                  <>
+                    <textarea
+                      name="content"
+                      value={editedContent.content || comment.content}
+                      onChange={handleCommentChange}
+                      className="block outline-none rounded-md mt-2 w-full p-2 border border-gray-300"
+                    ></textarea>
+                    <button
+                      onClick={() => handleSendEditedComment(comment.id)}
+                      className="bg-green-500 hover:bg-green-300 duration-300 px-1 rounded-md text-white mt-2"
+                    >
+                      Send
+                    </button>
+                  </>
+                )}
               </div>
-
             </div>
           ))}
         </div>
@@ -212,19 +274,21 @@ const Post = () => {
             name="content"
             value={comment.content}
             onChange={handleOnChange}
-            className={`${commentToggle
-              ? "block w-full border-2 outline-none px-2 py-1 my-4"
-              : "hidden"
-              }`}
+            className={`${
+              commentToggle
+                ? "block w-full border-2 outline-none px-2 py-1 my-4"
+                : "hidden"
+            }`}
             aria-label="Add your comment"
             placeholder="Write your comment here..."
           ></textarea>
           <button
             onClick={handleCommentSubmit}
-            className={`${commentToggle
-              ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
-              : "hidden"
-              }`}
+            className={`${
+              commentToggle
+                ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
+                : "hidden"
+            }`}
           >
             Send
           </button>
