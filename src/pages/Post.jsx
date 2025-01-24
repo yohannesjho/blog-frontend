@@ -129,6 +129,34 @@ const Post = () => {
     }
   };
 
+  const handleDeleteComment = async (id) => {
+    console.log(id)
+    const token = localStorage.getItem("user");
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/comments/deletecomment/${id}`,
+        {
+          method:'DELETE',
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error fetching comments!");
+      }
+      else {
+        alert('You deleted a comment successfully')
+      }
+
+      
+    } catch (error) {
+      console.error(error.message);
+      alert(error.message);
+    }
+  }
+
   return (
     <div className="flex justify-center items-center py-12">
       <div className="w-full md:w-3/4 lg:w-1/2 mx-auto space-y-8">
@@ -167,6 +195,7 @@ const Post = () => {
                 <p className="text-gray-800 text-lg font-medium">{comment.content}</p>
 
                 <p className="text-gray-500 text-sm mt-4">{new Date(comment.created_at).toLocaleString()}</p>
+                <button onClick={() => handleDeleteComment(comment.id)} className="bg-red-500 text-white rounded-lg text-sm hover:bg-red-300 duration-300 px-2 py-1">Delete</button>
               </div>
 
             </div>
