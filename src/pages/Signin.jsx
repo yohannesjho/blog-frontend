@@ -28,7 +28,7 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      const response = await fetch("http://localhost:5000/api/users/signin", {
+      const response = await fetch("https://blog-app-backend-s93x.onrender.com/api/users/signin", {
         method: "POST", // Method name should be a string
         headers: {
           "Content-Type": "application/json" // Specify that you're sending JSON data

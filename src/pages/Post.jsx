@@ -19,7 +19,7 @@ const Post = () => {
       const token = localStorage.getItem("user");
       try {
         const response = await fetch(
-          `http://localhost:5000/api/posts/getpost/${postId}`,
+          `https://blog-app-backend-s93x.onrender.com/api/posts/getpost/${postId}`,
           {
             headers: {
               authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Post = () => {
       const token = localStorage.getItem("user");
       try {
         const response = await fetch(
-          `http://localhost:5000/api/comments/getcomments/${postId}`,
+          `https://blog-app-backend-s93x.onrender.com/api/comments/getcomments/${postId}`,
           {
             headers: {
               authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ const Post = () => {
   };
 
   const getUser = async (id) => {
-    const response = await fetch(`http://localhost:5000/api/users/user/${id}`);
+    const response = await fetch(`https://blog-app-backend-s93x.onrender.com/api/users/user/${id}`);
     const data = await response.json();
 
     if (response.ok) {
@@ -105,7 +105,7 @@ const Post = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/comments/createcomment",
+        "https://blog-app-backend-s93x.onrender.com/api/comments/createcomment",
         {
           method: "POST",
           headers: {
@@ -133,7 +133,7 @@ const Post = () => {
     const token = localStorage.getItem("user");
     try {
       const response = await fetch(
-        `http://localhost:5000/api/comments/deletecomment/${id}`,
+        `https://blog-app-backend-s93x.onrender.com/api/comments/deletecomment/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -164,7 +164,7 @@ const Post = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/comments/updatecomment/${id}`,
+        `https://blog-app-backend-s93x.onrender.com/api/comments/updatecomment/${id}`,
         {
           method: "PUT",
           headers: {

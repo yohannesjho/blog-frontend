@@ -4,6 +4,7 @@ import { ArrowUpRight, SquareArrowOutUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const cards = () => {
+
     const [category, setCategory] = useState("")
 
     const [blogs, setBlogs] = useState([])
@@ -12,7 +13,7 @@ const cards = () => {
         const fetchBlogs = async () => {
              
             try {
-                const response = await fetch('http://localhost:5000/api/posts/getallposts')
+                const response = await fetch(`https://blog-app-backend-s93x.onrender.com/api/posts/getallposts`)
 
                 
                 if (!response.ok) {
