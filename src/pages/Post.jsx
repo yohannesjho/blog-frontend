@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 const Post = () => {
   const { postId } = useParams();
   const [blog, setBlog] = useState({});
+  const [comments, setComments] = useState([]);
   const [commentToggle, setCommentToggle] = useState(false);
-  const [comment, setComment] = useState({ content: "", id: postId });
+  const [comment, setComment] = useState({ content: "", postId: postId });
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -35,6 +36,36 @@ const Post = () => {
 
     fetchBlog();
   }, [postId]);
+
+  // Fetch comments for the blog post
+  useEffect(() => {
+    const fetchComments = async () => {
+      const token = localStorage.getItem("user");
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/comments/getcomments/${postId}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Error fetching comments!");
+        }
+
+        const data = await response.json();
+        console.log("Comments:", data);
+        setComments(data.comment); // Assuming backend returns a 'comments' array
+      } catch (error) {
+        console.error(error.message);
+        alert(error.message);
+      }
+    };
+
+    fetchComments();
+  }, [postId, comments]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -73,18 +104,34 @@ const Post = () => {
   return (
     <div className="flex justify-center items-center py-12">
       <div className="w-full md:w-3/4 lg:w-1/2 mx-auto space-y-8">
-        <h2 className="md:text-xl lg:text-2xl font-bold text-center">
-          {blog.title}
-        </h2>
         <div>
-          <img
-            src={blog.img_url}
-            alt={blog.title}
-            className="w-full h-full object-cover"
-          />
+
+          <h2 className="md:text-xl lg:text-2xl font-bold text-center">
+            {blog.title}
+          </h2>
+          <div>
+            <img
+              src={blog.img_url}
+              alt={blog.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <p>{blog.content}</p>
         </div>
-        <p>{blog.content}</p>
+        {/* all comments */}
         <div>
+            {
+              comments.map((comment) =>(
+                <div className="flex gap-2">
+
+                  <p>{comment.content}</p>..
+                  <p>{comment.created_at}</p>
+                </div>
+              ))
+            }
+        </div>
+        <div>
+
           <button
             className="bg-yellow-500 hover:bg-yellow-400 px-2 py-1 rounded-md"
             onClick={() => setCommentToggle(!commentToggle)}
@@ -95,21 +142,19 @@ const Post = () => {
             name="content"
             value={comment.content}
             onChange={handleOnChange}
-            className={`${
-              commentToggle
+            className={`${commentToggle
                 ? "block w-full border-2 outline-none px-2 py-1 my-4"
                 : "hidden"
-            }`}
+              }`}
             aria-label="Add your comment"
             placeholder="Write your comment here..."
           ></textarea>
           <button
             onClick={handleCommentSubmit}
-            className={`${
-              commentToggle
+            className={`${commentToggle
                 ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
                 : "hidden"
-            }`}
+              }`}
           >
             Send
           </button>
