@@ -79,7 +79,7 @@ const Post = () => {
       const user = await getUser(id);
       console.log(user)
       setUsers((prevUsers) => ({ ...prevUsers, [id]: user }));
-     
+
     }
   };
 
@@ -87,9 +87,9 @@ const Post = () => {
     const response = await fetch(`http://localhost:5000/api/users/user/${id}`);
     const data = await response.json();
 
-     
+
     if (response.ok) {
-     console.log(data.user[0])
+      console.log(data.user[0])
       return data.user[0]; // Ensure it returns user data
     }
     return null;
@@ -148,19 +148,27 @@ const Post = () => {
         {/* Render comments */}
         <div>
           {comments.map((comment) => (
-           
-            <div
-            
-              key={comment.id} // Add unique key for each comment
-              className="flex gap-2 items-center"
-            >
-            {console.log(comment)}
 
-              <div>
-                <p>{comment.content}</p>
-                <p>{users[comment.user_id]?.username || "Loading..."}</p>
+            <div
+
+              key={comment.id} // Add unique key for each comment
+              className="flex justify-between  items-center"
+            >
+              <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2  text-gray-600">
+                  <span className="block">
+                    <span className="font-semibold">Name: </span>{users[comment.user_id]?.username || "Loading..."}
+                  </span>
+                  <span className="block">
+                    <span className="font-semibold">Role: </span>{users[comment.user_id]?.role || "Loading..."}
+                  </span>
+                </div>
+                <p className="text-gray-800 text-lg font-medium">{comment.content}</p>
+
+                <p className="text-gray-500 text-sm mt-4">{new Date(comment.created_at).toLocaleString()}</p>
               </div>
-              <p>{comment.created_at}</p>
+
             </div>
           ))}
         </div>
@@ -175,21 +183,19 @@ const Post = () => {
             name="content"
             value={comment.content}
             onChange={handleOnChange}
-            className={`${
-              commentToggle
-                ? "block w-full border-2 outline-none px-2 py-1 my-4"
-                : "hidden"
-            }`}
+            className={`${commentToggle
+              ? "block w-full border-2 outline-none px-2 py-1 my-4"
+              : "hidden"
+              }`}
             aria-label="Add your comment"
             placeholder="Write your comment here..."
           ></textarea>
           <button
             onClick={handleCommentSubmit}
-            className={`${
-              commentToggle
-                ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
-                : "hidden"
-            }`}
+            className={`${commentToggle
+              ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
+              : "hidden"
+              }`}
           >
             Send
           </button>
