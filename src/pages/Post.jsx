@@ -11,6 +11,7 @@ const Post = () => {
   const [deleteComment, setDeleteComment] = useState(false);
   const [editCommentId, setEditCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState({ content: "" });
+  const [ editComment, setEditComment ] = useState(false)
 
   // Fetch blog details
   useEffect(() => {
@@ -68,7 +69,7 @@ const Post = () => {
     };
 
     fetchComments();
-  }, [postId, deleteComment]);
+  }, [postId, deleteComment, editComment]);
 
   // Fetch user data for each comment
   useEffect(() => {
@@ -177,6 +178,7 @@ const Post = () => {
       if (!response.ok) {
         throw new Error("Error updating comment!");
       } else {
+        setEditComment(prev => !prev)
         alert("Comment updated successfully!");
         setEditCommentId(null); // Close the edit input after update
       }
@@ -202,20 +204,21 @@ const Post = () => {
           </div>
           <p>{blog.content}</p>
         </div>
-        <div>
+        <div className=" ">
           {comments.map((comment) => (
+            
             <div
               key={comment.id}
-              className="flex justify-between items-center"
+              className="flex justify-between items-center mt-4"
             >
-              <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+              <div className="bg-gray-100 w-full p-4 rounded-lg shadow-md">
                 <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2 text-gray-600">
                   <span className="block">
-                    <span className="font-semibold">Name: </span>
+                    <span className="font-semibold">:- </span>
                     {users[comment.user_id]?.username || "Loading..."}
                   </span>
                   <span className="block">
-                    <span className="font-semibold">Role: </span>
+                    <span className="font-semibold">-</span>
                     {users[comment.user_id]?.role || "Loading..."}
                   </span>
                 </div>
@@ -261,6 +264,7 @@ const Post = () => {
                 )}
               </div>
             </div>
+            
           ))}
         </div>
         <div>
