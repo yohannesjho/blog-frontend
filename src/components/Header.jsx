@@ -25,8 +25,8 @@ const logout = () => {
 
                     <nav className='space-x-6 hidden md:block'>
 
-                        <Link to="/category">Category</Link>
-                        <Link to="/article">Article</Link>
+                        <Link to="/">Home</Link>
+                        <Link to="/all">All Blogs</Link>
                         <Link to="about">About</Link>
                         <Link to="/contact">Contact</Link>
                     </nav>

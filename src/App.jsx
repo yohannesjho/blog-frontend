@@ -11,6 +11,7 @@ import Signin from "./pages/Signin"
 import Dashboard from "./pages/Dashboard"
 import { AuthProvider } from "./AuthContext"
 import { ToastContainer } from "react-toastify";
+import All from "./pages/All"
 
 
 
@@ -23,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/category" element={<Category />} />
-            <Route path="/article" element={<Article />} />
+            <Route path="/all" element={<All />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/post/:postId" element={<Post />} />
