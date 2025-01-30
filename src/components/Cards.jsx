@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import data from '../data'
 import { ArrowUpRight, SquareArrowOutUpRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../AuthContext'
 
 const cards = () => {
+
+    const navigate = useNavigate();
+
+    const { token } = useAuth();
 
     const [category, setCategory] = useState("")
 
@@ -11,18 +16,18 @@ const cards = () => {
 
     useEffect(() => {
         const fetchBlogs = async () => {
-             
+
             try {
                 const response = await fetch(`https://blog-app-backend-s93x.onrender.com/api/posts/getallposts`)
 
-                
+
                 if (!response.ok) {
                     alert("couldnot fetch blogs")
                     return;
                 }
                 else {
                     const data = await response.json()
-                    
+
                     setBlogs(data.posts)
                 }
 
@@ -36,10 +41,18 @@ const cards = () => {
 
         fetchBlogs()
     }, [])
-    
-    const fiveBlogs = blogs.slice(0,5)
-    
+
+    const fiveBlogs = blogs.slice(0, 5)
+
     console.log(fiveBlogs)
+
+    const handleNavigation = (id) => {
+        if (token) {
+            navigate(`/post/${id}`);
+        } else {
+            navigate('/signin');
+        }
+    };
     return (
         <div>
             <div className='border-b-2 p-2 md:flex space-x-6 text-gray-600  hidden text-sm lg:text-base'>
@@ -62,11 +75,10 @@ const cards = () => {
 
                         <h2 className='font-semibold text-sm md:text-xl'>{blog.title}</h2>
                         <p className='text-gray-500 text-xs md:text-base line-clamp-2'>{blog.content}</p>
-                        <Link  to={`/post/${blog.id}`} className='flex cursor-pointer'>
-
+                        <div onClick={() => handleNavigation(blog.id)} className='flex cursor-pointer'>
                             <button className='text-black'>Read post</button>
                             <ArrowUpRight />
-                        </Link>
+                        </div>
                     </div>
                 ))}
             </div>
