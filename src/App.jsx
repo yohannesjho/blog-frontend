@@ -10,6 +10,7 @@ import Signup from "./pages/Signup"
 import Signin from "./pages/Signin"
 import Dashboard from "./pages/Dashboard"
 import { AuthProvider } from "./AuthContext"
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -17,7 +18,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-
+      <ToastContainer />
         <Layout className="">
           <Routes>
             <Route path="/" element={<Home />} />

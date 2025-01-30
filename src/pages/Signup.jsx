@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
     const [formData, setFormData] = useState({ userName: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
-    const [ selected, setSelected ] = useState(false)
-    const [ admin, setAdmin ]= useState(false)
+    const [selected, setSelected] = useState(false)
+    const [admin, setAdmin] = useState(false)
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false); // Loading state
 
     // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        
+
         setFormData({ ...formData, [name]: value });
         console.log(formData)
     };
@@ -32,24 +35,30 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
-            const response = await fetch("https://blog-app-backend-s93x.onrender.com/api/users/signup", {
-                method: "POST", // Method name should be a string
-                headers: {
-                    "Content-Type": "application/json" // Specify that you're sending JSON data
-                },
-                body: JSON.stringify(formData) // Use `JSON.stringify` to convert the object to JSON format
-            });
-
-            
-
-            if(!response.ok) {
+            setLoading(true); // Start loading
+            try {
+                const response = await fetch("https://blog-app-backend-s93x.onrender.com/api/users/signup", {
+                    method: "POST", // Method name should be a string
+                    headers: {
+                        "Content-Type": "application/json" // Specify that you're sending JSON data
+                    },
+                    body: JSON.stringify(formData) // Use `JSON.stringify` to convert the object to JSON format
+                });
                 const data = await response.json()
-                 alert(data.message)
+                if (!response.ok) {
+                    toast.error(data.message); // Show error toast
+
+                }
+                else {
+                    toast.success("Signed in successfully!"); // Show success toast
+                    navigate('/signin'); // Redirect to signin page
+                }
+            } catch (error) {
+                toast.error("Something went wrong. Please try again.");
+            } finally {
+                setLoading(false); // Stop loading
             }
-            else {
-                alert('Signup successful!');
-                navigate('/signin'); // Redirect to signin page
-            }
+
         }
     };
 
@@ -71,7 +80,7 @@ const Signup = () => {
                         onChange={handleInputChange}
                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                     />
-                   {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
 
                 </div>
 
@@ -103,9 +112,14 @@ const Signup = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none flex items-center justify-center"
+                    disabled={loading}
                 >
-                    Sign Up
+                    {loading ? (
+                        <div className="animate-spin h-5 w-5 border-4 border-white border-t-transparent rounded-full"></div>
+                    ) : (
+                        "Sign Up"
+                    )}
                 </button>
 
                 <p className="text-sm text-center mt-4">

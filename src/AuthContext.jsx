@@ -1,11 +1,12 @@
  
 import React, { createContext, useState, useEffect, useContext } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 // Create AuthContext
 const AuthContext = createContext();
 
 // Create AuthProvider component to wrap your app and provide auth state
 export const AuthProvider = ({ children }) => {
+    
     const [token, setToken] = useState(null);
 
     // On mount, load the token from localStorage
@@ -22,6 +23,8 @@ export const AuthProvider = ({ children }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         setToken(null);
+        
+       
     };
 
     return (
