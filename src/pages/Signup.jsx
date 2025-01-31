@@ -6,17 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 const Signup = () => {
     const [formData, setFormData] = useState({ userName: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
-    const [selected, setSelected] = useState(false)
-    const [admin, setAdmin] = useState(false)
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false); // Loading state
+    const navigate = useNavigate();
 
     // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
         setFormData({ ...formData, [name]: value });
-        console.log(formData)
     };
 
     // Validate form inputs
@@ -38,19 +34,15 @@ const Signup = () => {
             setLoading(true); // Start loading
             try {
                 const response = await fetch("https://blog-app-backend-s93x.onrender.com/api/users/signup", {
-                    method: "POST", // Method name should be a string
-                    headers: {
-                        "Content-Type": "application/json" // Specify that you're sending JSON data
-                    },
-                    body: JSON.stringify(formData) // Use `JSON.stringify` to convert the object to JSON format
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
                 });
-                const data = await response.json()
+                const data = await response.json();
                 if (!response.ok) {
                     toast.error(data.message); // Show error toast
-
-                }
-                else {
-                    toast.success("Signed in successfully!"); // Show success toast
+                } else {
+                    toast.success("Signed up successfully!"); // Show success toast
                     navigate('/signin'); // Redirect to signin page
                 }
             } catch (error) {
@@ -58,20 +50,16 @@ const Signup = () => {
             } finally {
                 setLoading(false); // Stop loading
             }
-
         }
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <form
-                onSubmit={handleSubmit}
-                className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm"
-            >
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-sm lg:max-w-md">
                 <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
 
                 <div className="mb-4">
-                    <label htmlFor="userName" className="block text-sm font-medium mb-1">userName</label>
+                    <label htmlFor="userName" className="block text-sm font-medium mb-1">User Name</label>
                     <input
                         type="text"
                         id="userName"
@@ -81,7 +69,6 @@ const Signup = () => {
                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-
                 </div>
 
                 <div className="mb-4">

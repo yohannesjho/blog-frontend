@@ -4,7 +4,6 @@ import { useAuth } from '../AuthContext';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const Signin = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -54,8 +53,8 @@ const Signin = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-sm lg:max-w-md">
         <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
 
         <div className="mb-4">

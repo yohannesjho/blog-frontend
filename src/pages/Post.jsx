@@ -13,13 +13,12 @@ const Post = () => {
   const [deleteComment, setDeleteComment] = useState(false);
   const [editCommentId, setEditCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState({ content: "" });
-  const [editComment, setEditComment] = useState(false)
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [editComment, setEditComment] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch blog details
   useEffect(() => {
     const fetchBlog = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       const token = localStorage.getItem("user");
       try {
         const response = await fetch(
@@ -41,14 +40,13 @@ const Post = () => {
         console.error(error.message);
         alert(error.message);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
 
     fetchBlog();
   }, [postId]);
 
-  // Fetch comments
   useEffect(() => {
     const fetchComments = async () => {
       const token = localStorage.getItem("user");
@@ -77,7 +75,6 @@ const Post = () => {
     fetchComments();
   }, [postId, deleteComment, editComment, comments]);
 
-  // Fetch user data for each comment
   useEffect(() => {
     comments.forEach((comment) => {
       fetchUser(comment.user_id);
@@ -124,16 +121,13 @@ const Post = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.message)
-      }
-      else {
-        toast.success("Comment added successfully!")
-
+        toast.error(data.message);
+      } else {
+        toast.success("Comment added successfully!");
         setComments((prevComments) => [...prevComments, data.comment]);
       }
     } catch (error) {
-      toast.error("Failed to submit comment:")
-
+      toast.error("Failed to submit comment:");
     }
   };
 
@@ -149,9 +143,9 @@ const Post = () => {
           },
         }
       );
-      const data = await response.json()
+      const data = await response.json();
       if (!response.ok) {
-        toast.error(data.message); // Show error toast
+        toast.error(data.message);
       } else {
         toast.success("Comment deleted successfully!");
         setDeleteComment((prev) => !prev);
@@ -182,15 +176,13 @@ const Post = () => {
           body: JSON.stringify(editedContent),
         }
       );
-      const data = await response.json()
+      const data = await response.json();
       if (!response.ok) {
-        toast.error(data.message)
-
+        toast.error(data.message);
       } else {
-        setEditComment(prev => !prev)
-        toast.success("Comment updated successfully!")
-
-        setEditCommentId(null); // Close the edit input after update
+        setEditComment((prev) => !prev);
+        toast.success("Comment updated successfully!");
+        setEditCommentId(null);
       }
     } catch (error) {
       console.error(error.message);
@@ -199,51 +191,42 @@ const Post = () => {
   };
 
   return (
-    <div>
+    <div className="container mx-auto px-4 py-12 lg:w-3/4">
       {loading ? (
         <div className="flex justify-center items-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
         </div>
-      ) : (<div className="flex justify-center items-center py-12">
-        <div className="w-full md:w-3/4 lg:w-1/2 mx-auto space-y-8">
+      ) : (
+        <div className="space-y-8">
           <div>
-            <h2 className="md:text-xl lg:text-2xl font-bold text-center">
-              {blog.title}
-            </h2>
-            <div>
+            <h2 className="text-xl lg:text-2xl font-bold text-center">{blog.title}</h2>
+            <div className="relative w-full overflow-hidden h-96">
               <img
                 src={blog.img_url}
                 alt={blog.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
               />
             </div>
-            <p>{blog.content}</p>
+            <p className="mt-4 text-base text-gray-800">{blog.content}</p>
           </div>
-          <div className=" ">
-            {comments.map((comment) => (
 
-              <div
-                key={comment.id}
-                className="flex justify-between items-center mt-4"
-              >
+          <div className="space-y-6">
+            {comments.map((comment) => (
+              <div key={comment.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                 <div className="bg-gray-100 w-full p-4 rounded-lg shadow-md">
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2 text-gray-600">
-                    <span className="block">
-                      <span className="font-semibold">:- </span>
+                    <span className="font-semibold">
                       {users[comment.user_id]?.username || "Loading..."}
                     </span>
-                    <span className="block">
-                      <span className="font-semibold">-</span>
+                    <span className="text-sm text-gray-500">
                       {users[comment.user_id]?.role || "Loading..."}
                     </span>
                   </div>
-                  <p className="text-gray-800 text-lg font-medium">
-                    {comment.content}
-                  </p>
+                  <p className="text-gray-800 text-lg font-medium mt-2">{comment.content}</p>
                   <p className="text-gray-500 text-sm mt-4">
                     {new Date(comment.created_at).toLocaleString()}
                   </p>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 mt-2">
                     <button
                       onClick={() => handleDeleteComment(comment.id)}
                       className="bg-red-500 text-white rounded-lg text-sm hover:bg-red-300 duration-300 px-2 py-1"
@@ -262,7 +245,7 @@ const Post = () => {
                     </button>
                   </div>
                   {editCommentId === comment.id && (
-                    <>
+                    <div className="mt-4">
                       <textarea
                         name="content"
                         value={editedContent.content || comment.content}
@@ -271,49 +254,50 @@ const Post = () => {
                       ></textarea>
                       <button
                         onClick={() => handleSendEditedComment(comment.id)}
-                        className="bg-green-500 hover:bg-green-300 duration-300 px-1 rounded-md text-white mt-2"
+                        className="bg-green-500 hover:bg-green-300 duration-300 px-2 py-1 mt-2 text-white rounded-md"
                       >
                         Send
                       </button>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
-
             ))}
           </div>
-          <div>
+
+          <div className="space-y-4">
             <button
-              className="bg-yellow-500 hover:bg-yellow-400 px-2 py-1 rounded-md"
+              className="bg-yellow-500 hover:bg-yellow-400 px-4 py-2 rounded-md"
               onClick={() => setCommentToggle(!commentToggle)}
             >
-              Add comment
+              Add Comment
             </button>
             <textarea
               name="content"
               value={comment.content}
               onChange={handleOnChange}
-              className={`${commentToggle
-                ? "block w-full border-2 outline-none px-2 py-1 my-4"
-                : "hidden"
-                }`}
+              className={`${
+                commentToggle
+                  ? "block w-full border-2 outline-none px-2 py-1 my-4"
+                  : "hidden"
+              }`}
               aria-label="Add your comment"
               placeholder="Write your comment here..."
             ></textarea>
             <button
               onClick={handleCommentSubmit}
-              className={`${commentToggle
-                ? "block bg-green-500 hover:bg-green-400 px-2 py-1 rounded-md"
-                : "hidden"
-                }`}
+              className={`${
+                commentToggle
+                  ? "block bg-green-500 hover:bg-green-400 px-4 py-2 rounded-md"
+                  : "hidden"
+              }`}
             >
               Send
             </button>
           </div>
         </div>
-      </div>)}
+      )}
     </div>
-
   );
 };
 
