@@ -37,8 +37,7 @@ const Post = () => {
         const data = await response.json();
         setBlog(data.post[0]);
       } catch (error) {
-        console.error(error.message);
-        alert(error.message);
+        toast.error("something went, please try again!")
       } finally {
         setLoading(false);
       }
@@ -67,8 +66,7 @@ const Post = () => {
         const data = await response.json();
         setComments(data.comment);
       } catch (error) {
-        console.error(error.message);
-        alert(error.message);
+        toast.error("something went, please try again!")
       }
     };
 
@@ -151,8 +149,7 @@ const Post = () => {
         setDeleteComment((prev) => !prev);
       }
     } catch (error) {
-      console.error(error.message);
-      alert(error.message);
+      toast.error("something went, please try again!")
     }
   };
 
@@ -185,13 +182,12 @@ const Post = () => {
         setEditCommentId(null);
       }
     } catch (error) {
-      console.error(error.message);
-      alert(error.message);
+      toast.error("something went, please try again!")
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 lg:w-3/4">
+    <div className="container mx-auto px-4 py-12 w-full   lg:w-3/4 xl:w-2/3">
       {loading ? (
         <div className="flex justify-center items-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
@@ -212,9 +208,9 @@ const Post = () => {
 
           <div className="space-y-6">
             {comments.map((comment) => (
-              <div key={comment.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                <div className="bg-gray-100 w-full p-4 rounded-lg shadow-md">
-                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2 text-gray-600">
+              <div key={comment.id} className="w-full">
+                <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 text-gray-600">
                     <span className="font-semibold">
                       {users[comment.user_id]?.username || "Loading..."}
                     </span>
