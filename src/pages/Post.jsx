@@ -196,11 +196,11 @@ const Post = () => {
         <div className="space-y-8">
           <div>
             <h2 className="text-xl lg:text-2xl font-bold text-center">{blog.title}</h2>
-            <div className="relative w-full overflow-hidden h-96">
+            <div className="relative w-full h-96">
               <img
                 src={blog.img_url}
                 alt={blog.title}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover"
               />
             </div>
             <p className="mt-4 text-base text-gray-800">{blog.content}</p>
