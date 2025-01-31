@@ -2,18 +2,28 @@ import React from 'react'
 
 const HeroSection = () => {
     return (
-        <div className='flex md:flex-row justify-between space-x-6 flex-col space-y-6 md:space-y-0  '>
-            <div className='space-y-10'>
-                <h2 className='text-lg md:text-2xl lg:text-3xl font-bold text-center'>Untitled Blog</h2>
-                <div className='border-2 rounded-2xl w-72 flex justify-between'>
-                    <input type='email' placeholder='Enter your email' className='  px-2 py-1 outline-none' />
-                    <button className='bg-black text-white px-2 py-1 border rounded-2xl'>Subscribe</button>
-                </div>
-            </div>
-            <div>
-                <p className='text-gray-400'>New product features, the latest in <br /> technology, solutions, and updates</p>
-            </div>
-        </div>
+        <div className="flex flex-col md:flex-row justify-between gap-6 w-full max-w-3xl mx-auto px-4">
+  <div className="space-y-6 text-center md:text-left">
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Untitled Blog</h2>
+    <div className="border-2 rounded-2xl flex items-center w-full max-w-md mx-auto md:mx-0">
+      <input
+        type="email"
+        placeholder="Enter your email"
+        className="px-3 py-2 flex-1 outline-none w-full"
+      />
+      <button className="bg-black text-white px-4 py-2 rounded-2xl whitespace-nowrap">
+        Subscribe
+      </button>
+    </div>
+  </div>
+  <div className="text-center md:text-left">
+    <p className="text-gray-400 text-sm sm:text-base">
+      New product features, the latest in <br className="hidden md:block" />
+      technology, solutions, and updates.
+    </p>
+  </div>
+</div>
+
     )
 }
 
