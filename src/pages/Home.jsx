@@ -5,7 +5,7 @@ import Cards from '../components/Cards'
 const Home = () => {
   return (
     <div className='space-y-12'>
-        <HeroSection />
+        // <HeroSection />
          <Cards />
     </div>
   )
