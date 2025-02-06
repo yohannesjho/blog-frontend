@@ -85,20 +85,20 @@ const cards = ({ source = "home" }) => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
-        {Blogs.map((blog) => (
-          <div key={blog.id}>
-            <div className="h-28 w-full md:w-52 lg:h-44 lg:w-72 border">
-              <img className="h-full w-full object-cover" src={blog.img_url} alt="image" />
-            </div>
+      {Blogs.slice().reverse().map((blog) => (
+  <div key={blog.id}>
+    <div className="h-28 w-full md:w-52 lg:h-44 lg:w-72 border">
+      <img className="h-full w-full object-cover" src={blog.img_url} alt="image" />
+    </div>
+    <h2 className="font-semibold text-sm md:text-xl">{blog.title}</h2>
+    <p className="text-gray-500 text-xs md:text-base line-clamp-2">{blog.content}</p>
+    <div onClick={() => handleNavigation(blog.id)} className="flex cursor-pointer">
+      <button className="text-black">Read post</button>
+      <ArrowUpRight />
+    </div>
+  </div>
+))}
 
-            <h2 className="font-semibold text-sm md:text-xl">{blog.title}</h2>
-            <p className="text-gray-500 text-xs md:text-base line-clamp-2">{blog.content}</p>
-            <div onClick={() => handleNavigation(blog.id)} className="flex cursor-pointer">
-              <button className="text-black">Read post</button>
-              <ArrowUpRight />
-            </div>
-          </div>
-        ))}
       </div>
     </>
   )}
