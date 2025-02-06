@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 
 
-const cards = ({ source = "home" }) => {
+const Cards = ({ source = "home" }) => {
     console.log(source)
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -107,4 +107,4 @@ const cards = ({ source = "home" }) => {
     )
 }
 
-export default cards
+export default Cards
